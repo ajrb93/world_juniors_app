@@ -81,13 +81,13 @@ with tab_cy:
         st.markdown("### % Drafted")
         fig_pie = px.pie(cy_df, values='FPoints', names='draft_type', hole=0.4)
         fig_pie.update_layout(margin=dict(l=0,r=0,t=20,b=0), height=180, showlegend=True, legend=dict(orientation="h", yanchor="bottom", y=-0.5, xanchor="center", x=0.5))
-        st.plotly_chart(fig_pie, use_container_width=True,height=120)
+        st.plotly_chart(fig_pie, use_container_width=True,height=110)
 
         st.markdown("### Countries")
         country_pts = cy_df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints',ascending=False)
         fig_bar = px.bar(country_pts, x='FPoints', y='team', orientation='h', color='team', color_discrete_map=COUNTRY_COLORS)
         fig_bar.update_layout(showlegend=False, margin=dict(l=0,r=0,t=0,b=0), height=230, xaxis_title=None, yaxis_title=None)
-        st.plotly_chart(fig_bar, use_container_width=True,height=120)
+        st.plotly_chart(fig_bar, use_container_width=True,height=130)
 
     # --- COLUMN 2: MIDDLE ---
     with col2:
