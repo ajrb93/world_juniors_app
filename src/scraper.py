@@ -178,12 +178,12 @@ def run_pipeline():
         print(f"Pipeline Complete: {MASTER_FILE} updated.")
 
 def transform_final_dataset():
-    dynamic_master_path = 'data/dynamic/Stats_CY_Master.csv'
+    dynamic_master_path = 'data/dynamic/Final_Master_Dataset.csv'
     if os.path.exists(dynamic_master_path):
         print(f"Loading existing data from {dynamic_master_path}")
         current = pd.read_csv(dynamic_master_path)
     else:
-        print("First run: Stats_CY_Master.csv not found. Creating empty template.")
+        print("First run: Final_Master_Dataset.csv not found. Creating empty template.")
         current = pd.DataFrame(columns=['year','name','game_id'])
     historical = pd.read_csv('data/static/Stats_Historical.csv')
     rosters = pd.read_csv('data/static/Rosters_Full.csv')
