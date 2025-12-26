@@ -58,6 +58,7 @@ fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
 tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
 
 with tab_cy:
+    col1, col2, col3 = st.columns([1, 2,2])
     # --- COLUMN 1: LEFT ---
     with col1:
         available_years = sorted(df['year'].unique(), reverse=True)
