@@ -33,15 +33,6 @@ COUNTRY_COLORS = {
     'Switzerland': '#DA291C', 'Germany': '#000000', 'Latvia': '#9E3039', 'Kazakhstan': '#00B1D8'
 }
 
-compact_config = {
-    "FPoints": st.column_config.NumberColumn("FP", width="small"),
-    "g": st.column_config.NumberColumn("G", width="small"),
-    "a": st.column_config.NumberColumn("A", width="small"),
-    "gwg": st.column_config.NumberColumn("GWG", width="small"),
-    "team": st.column_config.TextColumn("Team", width="small"),
-    "name": st.column_config.TextColumn("Player", width="medium"),
-}
-
 @st.cache_data
 def load_and_clean_data():
     df = pd.read_csv("data/dynamic/Final_Master_Dataset.csv")
@@ -91,7 +82,7 @@ with tab_cy:
         timeline['cum_pts'] = timeline.groupby('Draftee')['FPoints'].cumsum()
         
         fig_line = px.line(timeline, x='game_id', y='cum_pts', color='Draftee', markers=True)
-        fig_line.update_layout(height=150, margin=dict(l=0,r=0,t=20,b=0), xaxis_title="Game ID", yaxis_title="Points")
+        fig_line.update_layout(height=250, margin=dict(l=0,r=0,t=20,b=0), xaxis_title="Game ID", yaxis_title="Points")
         st.plotly_chart(fig_line, use_container_width=True)
 
         st.markdown("### Best Tournaments")
@@ -100,7 +91,7 @@ with tab_cy:
         }).reset_index().sort_values('FPoints', ascending=False)
         
         st.dataframe(best_tourney.style.format(fmt_dict), height=250, use_container_width=True, hide_index=True,
-                     column_config=compact_config)
+                     width = "content")
 
     # --- COLUMN 3: RIGHT ---
     with col3:
@@ -116,7 +107,7 @@ with tab_cy:
             pts_val = standings.loc[standings['Draftee']==manager, 'FPoints'].values[0]
             with st.expander(f"👤 {manager} | {pts_val:.1f} pts", expanded=True):
                 st.dataframe(player_detail.style.format(fmt_dict), use_container_width=True, hide_index=True,
-                             column_config=compact_config)
+                             width = "content")
 
 with tab_alltime:
     st.info("Ready for your All-Time layout specs!")
