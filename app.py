@@ -17,6 +17,18 @@ st.markdown("""
         font-weight: bold !important;
     }
             
+/* Shrinks the expander header text and reduces the vertical padding */
+    .streamlit-expanderHeader {
+        font-size: 12px !important;
+        padding-top: 1px !important;
+        padding-bottom: 1px !important;
+    }
+    
+    /* Optional: Change the background color of the leader's expander */
+    div[data-testid="stExpander"]:first-of-type {
+        border: 1px solid #ffcd00; /* Gold border for 1st place */
+    }
+            
     /* Shrink Header sizes */
     h1 { font-size: 14px !important; margin-bottom: 0.2rem !important; }
     h3 { font-size: 14px !important; margin-top: 0.2rem !important; margin-bottom: 0.2rem !important; }
@@ -102,7 +114,7 @@ with tab_cy:
         st.plotly_chart(fig_line, use_container_width=True)
 
         st.markdown("### Best Tournaments")
-        best_tourney = cy_df.fillna('Undrafted').groupby(['name','pos', 'team', 'Draftee']).agg({
+        best_tourney = cy_df.fillna('Undrafted').groupby(['name','pos', 'team']).agg({'Draftee':'last',
             'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
         }).reset_index().sort_values('FPoints', ascending=False)
         
@@ -122,7 +134,8 @@ with tab_cy:
             
             pts_val = standings.loc[standings['Draftee']==manager, 'FPoints'].values[0]
             is_expanded = (i == 0)
-            with st.expander(f"👤 {manager} | {pts_val:.1f} pts", expanded=is_expanded):
+            leader_icon = "🏆 " if i == 0 else "👤 "
+            with st.expander(f"{leader_icon}{manager} | {pts_val:.1f} pts", expanded=is_expanded):
                 st.dataframe(player_detail.style.format(fmt_dict), use_container_width=True, hide_index=True,
                              width = "content")
 
