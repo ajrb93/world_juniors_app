@@ -129,56 +129,53 @@ def run_pipeline():
     print(f"Found {len(to_process)} new games.")
 
     for url in to_process:
-	try:
-		temp_url = i
-		temp_url_lineup = temp_url.replace('playbyplay','lineup')
-    		temp_url_statistics = temp_url.replace('playbyplay','statistics')
-    		lineups = get_website(temp_url_lineup)
-    		lineups_soup = BeautifulSoup(lineups,'html.parser')
-    		if lineups_soup.find('title').text == "IIHF Error page":
-        		print(i)
-        		break
-    		else:
-        		game_winners, gwgscorer, gwg = extract_game_winners(lineups_soup)
-        		lineups = extract_game_lineups(lineups_soup)
-        		stats = get_website(temp_url_statistics)
-        		stats_soup = BeautifulSoup(stats,'html.parser')
-        		if stats_soup.find('title').text == "IIHF Error page":
-            			print(i)
-            			break
-        		else:
-            			stats = extract_game_stats(stats_soup,temp_url_statistics)
-            			game_gwg = game_winners.merge(stats[['name','team']])
-            			game_gwg = game_gwg[game_gwg.team == gwgscorer.lower()].reset_index(drop=True)
-            			game_gwg = game_gwg[game_gwg.index == gwg-1]
-            			stats.loc[stats.name == game_gwg.name.values[0],'gwg'] = 1
-            			stats = stats.merge(lineups,on='name',how='left')
-            			stats = stats.fillna(0)
-            			stats.to_csv(f"{DYNAMIC_DIR}/{url.split('/')[-1]}.csv", index=False)
-		pass
-	except Exception as e:
+        try:
+            temp_url = i
+            temp_url_lineup = temp_url.replace('playbyplay','lineup')
+            temp_url_statistics = temp_url.replace('playbyplay','statistics')
+            lineups = get_website(temp_url_lineup)
+            lineups_soup = BeautifulSoup(lineups,'html.parser')
+            if lineups_soup.find('title').text == "IIHF Error page":
+                print(i)
+                break
+            else:
+                game_winners, gwgscorer, gwg = extract_game_winners(lineups_soup)
+                lineups = extract_game_lineups(lineups_soup)
+                stats = get_website(temp_url_statistics)
+                stats_soup = BeautifulSoup(stats,'html.parser')
+                if stats_soup.find('title').text == "IIHF Error page":
+                    print(i)
+                    break
+                else:
+                    stats = extract_game_stats(stats_soup,temp_url_statistics)
+                    game_gwg = game_winners.merge(stats[['name','team']])
+                    game_gwg = game_gwg[game_gwg.team == gwgscorer.lower()].reset_index(drop=True)
+                    game_gwg = game_gwg[game_gwg.index == gwg-1]
+                    stats.loc[stats.name == game_gwg.name.values[0],'gwg'] = 1
+                    stats = stats.merge(lineups,on='name',how='left')
+                    stats = stats.fillna(0)
+                    stats.to_csv(f"{DYNAMIC_DIR}/{url.split('/')[-1]}.csv", index=False)
+            pass
+        except Exception as e:
             print(f"Error processing {url}: {e}")
     all_files = [f"{DYNAMIC_DIR}/{f}" for f in os.listdir(DYNAMIC_DIR) if f.endswith('.csv')]
     if all_files:
-	stats_full = pd.concat([pd.read_csv(f) for f in all_files])
-	stats_full = stats_full[stats_full.pos != 'GK']
-	stats_full['FP'] = (stats_full.g*1.5+ stats_full.a+ stats_full.gwg*3)
-
-	total_spm = stats_full.sog.sum() / (stats_full.game_id.max() * 2 * 60)
-	stats_full['minutes'] = stats_full.tot.str.split(':').str[0].astype('int') + stats_full.tot.str.split(':').str[1].astype('int')/60
-	stats_full['team_spma'] = (stats_full.groupby(['team','game_id']).sog.transform('sum') / 
-                           (stats_full.groupby(['team','game_id']).minutes.transform('sum') / 6))
-
-	stats_full['OGS'] = stats_full.g * 0.75 + stats_full.a * 0.625 + stats_full.ts * 0.075
-	stats_full['DGS'] = stats_full['+/-'] * 0.15 + (total_spm - stats_full.team_spma) * stats_full.minutes * 0.05
-	stats_full.loc[stats_full.pos == 'D','DGS'] *= 1.5
-	stats_full.loc[stats_full.pos == 'F','DGS'] *= 0.75
-	stats_full['GGS'] = stats_full.svs * 0.1 - stats_full.ga * 0.75
-	stats_full.loc[stats_full.pos == 'GK','DGS'] = 0
-	stats_full['GS'] = stats_full.OGS + stats_full.DGS + stats_full.GGS
-	stats_full = stats_full.drop(columns='team_spma')
-	stats_full.to_csv(MASTER_FILE, index=False)
-	print(f"Pipeline Complete: {MASTER_FILE} updated.")
+        stats_full = pd.concat([pd.read_csv(f) for f in all_files])
+        stats_full = stats_full[stats_full.pos != 'GK']
+        stats_full['FP'] = (stats_full.g*1.5+ stats_full.a+ stats_full.gwg*3)
+        total_spm = stats_full.sog.sum() / (stats_full.game_id.max() * 2 * 60)
+        stats_full['minutes'] = stats_full.tot.str.split(':').str[0].astype('int') + stats_full.tot.str.split(':').str[1].astype('int')/60
+        stats_full['team_spma'] = (stats_full.groupby(['team','game_id']).sog.transform('sum') / (stats_full.groupby(['team','game_id']).minutes.transform('sum') / 6))
+        stats_full['OGS'] = stats_full.g * 0.75 + stats_full.a * 0.625 + stats_full.ts * 0.075
+        stats_full['DGS'] = stats_full['+/-'] * 0.15 + (total_spm - stats_full.team_spma) * stats_full.minutes * 0.05
+        stats_full.loc[stats_full.pos == 'D','DGS'] *= 1.5
+        stats_full.loc[stats_full.pos == 'F','DGS'] *= 0.75
+        stats_full['GGS'] = stats_full.svs * 0.1 - stats_full.ga * 0.75
+        stats_full.loc[stats_full.pos == 'GK','DGS'] = 0
+        stats_full['GS'] = stats_full.OGS + stats_full.DGS + stats_full.GGS
+        stats_full = stats_full.drop(columns='team_spma')
+        stats_full.to_csv(MASTER_FILE, index=False)
+        print(f"Pipeline Complete: {MASTER_FILE} updated.")
 
 def transform_final_dataset():
     current = pd.read_csv('data/dynamic/Stats_CY.csv')
