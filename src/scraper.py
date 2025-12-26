@@ -129,9 +129,9 @@ def run_pipeline():
     print(f"Found {len(to_process)} new games.")
 
     for url in to_process:
-        try:
+	try:
 		temp_url = i
-    		temp_url_lineup = temp_url.replace('playbyplay','lineup')
+		temp_url_lineup = temp_url.replace('playbyplay','lineup')
     		temp_url_statistics = temp_url.replace('playbyplay','statistics')
     		lineups = get_website(temp_url_lineup)
     		lineups_soup = BeautifulSoup(lineups,'html.parser')
