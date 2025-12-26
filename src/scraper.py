@@ -130,13 +130,13 @@ def run_pipeline():
 
     for url in to_process:
         try:
-            temp_url = i
+            temp_url = url
             temp_url_lineup = temp_url.replace('playbyplay','lineup')
             temp_url_statistics = temp_url.replace('playbyplay','statistics')
             lineups = get_website(temp_url_lineup)
             lineups_soup = BeautifulSoup(lineups,'html.parser')
             if lineups_soup.find('title').text == "IIHF Error page":
-                print(i)
+                print(url)
                 break
             else:
                 game_winners, gwgscorer, gwg = extract_game_winners(lineups_soup)
@@ -144,7 +144,7 @@ def run_pipeline():
                 stats = get_website(temp_url_statistics)
                 stats_soup = BeautifulSoup(stats,'html.parser')
                 if stats_soup.find('title').text == "IIHF Error page":
-                    print(i)
+                    print(url)
                     break
                 else:
                     stats = extract_game_stats(stats_soup,temp_url_statistics)
@@ -184,7 +184,7 @@ def transform_final_dataset():
         current = pd.read_csv(dynamic_master_path)
     else:
         print("First run: Stats_CY_Master.csv not found. Creating empty template.")
-        current = pd.DataFrame()
+        current = pd.DataFrame(columns=['year','name','game_id'])
     historical = pd.read_csv('data/static/Stats_Historical.csv')
     rosters = pd.read_csv('data/static/Rosters_Full.csv')
     draft = pd.read_csv('data/static/DraftResults.txt',index_col=False) 
