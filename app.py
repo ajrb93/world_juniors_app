@@ -17,11 +17,6 @@ st.markdown("""
         font-weight: bold !important;
     }
             
-    /* Force the dataframe container to be tighter */
-    .stDataFrame {
-        margin-top: -10px !important;
-    }
-            
     /* Shrink Header sizes */
     h1 { font-size: 14px !important; margin-bottom: 0.2rem !important; }
     h3 { font-size: 14px !important; margin-top: 0.2rem !important; margin-bottom: 0.2rem !important; }
@@ -81,18 +76,18 @@ with tab_cy:
         st.markdown("### Standings")
         standings = cy_df.groupby('Draftee')['FPoints'].sum().reset_index().sort_values('FPoints', ascending=False)
         st.dataframe(standings.style.format({'FPoints': '{:.1f}'}).background_gradient(cmap='RdYlGn', subset=['FPoints']), 
-                     hide_index=True, use_container_width=True, height=100)
-
-        st.markdown("### Countries")
-        country_pts = cy_df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints',ascending=False)
-        fig_bar = px.bar(country_pts, x='FPoints', y='team', orientation='h', color='team', color_discrete_map=COUNTRY_COLORS)
-        fig_bar.update_layout(showlegend=False, margin=dict(l=0,r=0,t=0,b=0), height=230, xaxis_title=None, yaxis_title=None)
-        st.plotly_chart(fig_bar, use_container_width=True)
+                     hide_index=True, use_container_width=True, height=200)
 
         st.markdown("### % Drafted")
         fig_pie = px.pie(cy_df, values='FPoints', names='draft_type', hole=0.4)
         fig_pie.update_layout(margin=dict(l=0,r=0,t=20,b=0), height=180, showlegend=True, legend=dict(orientation="h", yanchor="bottom", y=-0.5, xanchor="center", x=0.5))
         st.plotly_chart(fig_pie, use_container_width=True)
+
+        st.markdown("### Countries")
+        country_pts = cy_df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints',ascending=False)
+        fig_bar = px.bar(country_pts, x='FPoints', y='team', orientation='h', color='team', color_discrete_map=COUNTRY_COLORS)
+        fig_bar.update_layout(showlegend=False, margin=dict(l=0,r=0,t=0,b=0), height=230, xaxis_title=None, yaxis_title=None)
+        st.plotly_chart(fig_bar, use_container_width=True,height=150)
 
     # --- COLUMN 2: MIDDLE ---
     with col2:
