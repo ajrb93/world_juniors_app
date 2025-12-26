@@ -9,17 +9,17 @@ st.set_page_config(layout="wide", page_title="WJC Fantasy")
 st.markdown("""
     <style>
     /* Reduce top/side margins */
-    .block-container {padding-top: 1rem; padding-bottom: 0rem; padding-left: 2rem; padding-right: 2rem;}
+    .block-container {padding-top: 0.5rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 2rem;}
             
     /* Ensure the Tab labels stay readable */
     button[data-baseweb="tab"] p {
-        font-size: 16px !important;
+        font-size: 14px !important;
         font-weight: bold !important;
     }
             
     /* Shrink Header sizes */
-    h1 { font-size: 16px !important; margin-bottom: 0.2rem !important; }
-    h3 { font-size: 14px !important; margin-top: 0.5rem !important; margin-bottom: 0.3rem !important; }
+    h1 { font-size: 14px !important; margin-bottom: 0.2rem !important; }
+    h3 { font-size: 14px !important; margin-top: 0.2rem !important; margin-bottom: 0.2rem !important; }
     
     /* Global font size for Dataframes */
     .stDataFrame div { font-size: 10px !important; }
@@ -28,7 +28,7 @@ st.markdown("""
     div[data-testid="stExpander"] div[role="button"] p { font-size: 12px !important; font-weight: bold; }
     
     /* Reduce gap between elements */
-    [data-testid="stVerticalBlock"] { gap: 0.3rem !important; }
+    [data-testid="stVerticalBlock"] { gap: 0.2rem !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -51,21 +51,27 @@ def load_and_clean_data():
 
 df = load_and_clean_data()
 
-available_years = sorted(df['year'].unique(), reverse=True)
-selected_year = st.selectbox("📅 Select Tournament Year", options=available_years, index=0)
-cy_df = df[df['year'] == selected_year].copy()
-
 # Formatting Helper: 1 decimal for FPoints, 0 for the rest
 fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
 
 # --- MAIN DASHBOARD ---
-tab_cy, tab_alltime = st.tabs([f"🏆 {selected_year} Tournament", "📜 All-Time Records"])
+tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
 
 with tab_cy:
-    col1, col2, col3 = st.columns([1, 2, 2])
-
     # --- COLUMN 1: LEFT ---
     with col1:
+        available_years = sorted(df['year'].unique(), reverse=True)
+        
+        # 'collapsed' visibility keeps the UI tight by removing the top label space
+        selected_year = st.selectbox(
+            "Select Year", 
+            options=available_years, 
+            index=0, 
+            key="cy_year_picker",
+            label_visibility="collapsed" 
+        )
+        cy_df = df[df['year'] == selected_year].copy()
+
         st.markdown("### Standings")
         standings = cy_df.groupby('Draftee')['FPoints'].sum().reset_index().sort_values('FPoints', ascending=False)
         st.dataframe(standings.style.format({'FPoints': '{:.1f}'}).background_gradient(cmap='RdYlGn', subset=['FPoints']), 
