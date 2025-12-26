@@ -64,7 +64,7 @@ with tab_cy:
                      hide_index=True, use_container_width=True, height=180)
 
         st.markdown("### Countries")
-        country_pts = cy_df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints')
+        country_pts = cy_df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints',ascending=False)
         fig_bar = px.bar(country_pts, x='FPoints', y='team', orientation='h', color='team', color_discrete_map=COUNTRY_COLORS)
         fig_bar.update_layout(showlegend=False, margin=dict(l=0,r=0,t=0,b=0), height=230, xaxis_title=None, yaxis_title=None)
         st.plotly_chart(fig_bar, use_container_width=True)
@@ -87,7 +87,7 @@ with tab_cy:
 
         st.markdown("### Best Tournaments")
         best_tourney = cy_df.groupby(['name', 'team', 'Draftee']).agg({
-            'FPoints': 'sum', 'goals': 'sum', 'assists': 'sum', 'gwg': 'sum'
+            'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
         }).reset_index().sort_values('FPoints', ascending=False)
         
         st.dataframe(best_tourney.style.format(fmt_dict), height=420, use_container_width=True, hide_index=True)
@@ -100,7 +100,7 @@ with tab_cy:
         for manager in ordered_managers:
             manager_data = cy_df[cy_df['Draftee'] == manager]
             player_detail = manager_data.groupby(['name', 'team', 'draft_type']).agg({
-                'FPoints': 'sum', 'goals': 'sum', 'assists': 'sum', 'gwg': 'sum'
+                'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
             }).reset_index().sort_values('FPoints', ascending=False)
             
             pts_val = standings.loc[standings['Draftee']==manager, 'FPoints'].values[0]
