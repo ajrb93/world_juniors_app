@@ -23,11 +23,6 @@ st.markdown("""
         padding-top: 1px !important;
         padding-bottom: 1px !important;
     }
-    
-    /* Optional: Change the background color of the leader's expander */
-    div[data-testid="stExpander"]:first-of-type {
-        border: 1px solid #ffcd00; /* Gold border for 1st place */
-    }
             
     /* Shrink Header sizes */
     h1 { font-size: 14px !important; margin-bottom: 0.2rem !important; }
@@ -113,7 +108,7 @@ with tab_cy:
         fig_line.update_layout(height=250, margin=dict(l=0,r=0,t=20,b=0), xaxis_title="Game ID", yaxis_title="Points")
         st.plotly_chart(fig_line, use_container_width=True)
 
-        st.markdown("### Best Tournaments")
+        st.markdown("### Top Players")
         best_tourney = cy_df.fillna('Undrafted').groupby(['name','pos', 'team']).agg({'Draftee':'last',
             'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
         }).reset_index().sort_values('FPoints', ascending=False)
