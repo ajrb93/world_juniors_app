@@ -9,7 +9,7 @@ st.set_page_config(layout="wide", page_title="WJC Fantasy")
 st.markdown("""
     <style>
     /* Reduce top/side margins */
-    .block-container {padding-top: 5rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 2rem;}
+    .block-container {padding-top: 3.5rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 2rem;}
             
     /* Ensure the Tab labels stay readable */
     button[data-baseweb="tab"] p {
