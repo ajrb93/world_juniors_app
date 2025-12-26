@@ -135,7 +135,7 @@ with tab_cy:
                              width = "content")
 
 with tab_alltime:
-    col_left, col_right = st.columns([0.35, 0.65])
+    col_left, col_right = st.columns([0.4, 0.6])
     with col_left:
         pd.set_option("styler.render.max_elements", 1000000)
         st.markdown("### Performance by Year")
@@ -148,7 +148,6 @@ with tab_alltime:
         all_time_countries = df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints', ascending=False)
         fig_all_countries = px.bar(all_time_countries, x='team', y='FPoints', color='team', color_discrete_map=COUNTRY_COLORS)
         fig_all_countries.update_layout(showlegend=False, height=250, margin=dict(l=0,r=0,t=0,b=0), xaxis_title=None, yaxis_title=None)
-        fig_all_countries.update_yaxes(tickmode='linear', tickfont=dict(size=10),automargin=True)
         st.plotly_chart(fig_all_countries, use_container_width=True,height=130) 
         st.markdown("### Draft Type by Year")
         draft_year = df[df['year'] >= 2019].groupby(['year', 'draft_type'])['FPoints'].sum().reset_index()
@@ -163,17 +162,17 @@ with tab_alltime:
                     'sog':'{:.0f}','ga':'{:.0f}','svs':'{:.0f}','minutes':'{:.0f}','OGS':'{:.1f}','DGS':'{:.1f}','GGS':'{:.1f}','GS':'{:.1f}'}
         st.markdown(f"### Record Book: {view_type}")
         if view_type == "Single Game":
-            records = df[~df.matchup.str.contains('all')].sort_values('FPoints', ascending=False)[['name','pos','team', 'year','matchup',
-                                                                  'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS','FPoints']]
+            records = df[~df.matchup.str.contains('all')].sort_values('FPoints', ascending=False)[['name','pos','team', 'year','matchup','FPoints',
+                                                                  'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS']]
             st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
         elif view_type == 'Single Season':
             records = pd.concat(
                 (df[df.matchup.str.contains('all')].drop(columns=['matchup','game_id']),
-                 df[~df.matchup.str.contains('all')].groupby(['year','team','name','pos']).sum(numeric_only=True).reset_index().drop(columns='game_id')))[['name','pos','team', 'year','gp',
-                                                                  'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS','FPoints']].sort_values('FPoints', ascending=False)
+                 df[~df.matchup.str.contains('all')].groupby(['year','team','name','pos']).sum(numeric_only=True).reset_index().drop(columns='game_id')))[['name','pos','team', 'year','FPoints','gp',
+                                                                  'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS']].sort_values('FPoints', ascending=False)
             st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
         else:
             records = df.groupby(['team','name','pos']).agg(
-                {'year':'nunique','g':'sum','a':'sum','p':'sum','ts':'sum','+/-':'sum','sog':'sum','ga':'sum','svs':'sum','gwg':'sum','minutes':'sum',
-                 'OGS':'sum','GGS':'sum','DGS':'sum','GS':'sum','FPoints':'sum'}).reset_index().sort_values('FPoints', ascending=False)
+                {'FPoints':'sum','year':'nunique','g':'sum','a':'sum','p':'sum','ts':'sum','+/-':'sum','sog':'sum','ga':'sum','svs':'sum','gwg':'sum','minutes':'sum',
+                 'OGS':'sum','GGS':'sum','DGS':'sum','GS':'sum'}).reset_index().sort_values('FPoints', ascending=False)
             st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
