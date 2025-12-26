@@ -135,7 +135,7 @@ with tab_cy:
                              width = "content")
 
 with tab_alltime:
-    col_left, col_right = st.columns([0.3, 0.7])
+    col_left, col_right = st.columns([0.35, 0.65])
     with col_left:
         pd.set_option("styler.render.max_elements", 1000000)
         st.markdown("### Performance by Year")
@@ -143,20 +143,20 @@ with tab_alltime:
         yearly_pivot['Total'] = yearly_pivot.sum(axis=1)
         yearly_pivot = yearly_pivot.sort_values('Total', ascending=False)
         st.dataframe(yearly_pivot.style.format("{:.1f}").background_gradient(cmap='RdYlGn', axis=0), 
-                     hide_index=False, use_container_width=True, height=200)
+                     hide_index=False, use_container_width=True, height=180)
         st.markdown("### Best Countries (All-Time)")
         all_time_countries = df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints', ascending=False)
-        fig_all_countries = px.bar(all_time_countries, x='FPoints', y='team', color='team', color_discrete_map=COUNTRY_COLORS)
+        fig_all_countries = px.bar(all_time_countries, x='team', y='FPoints', color='team', color_discrete_map=COUNTRY_COLORS)
         fig_all_countries.update_layout(showlegend=False, height=250, margin=dict(l=0,r=0,t=0,b=0), xaxis_title=None, yaxis_title=None)
         fig_all_countries.update_yaxes(tickmode='linear', tickfont=dict(size=10),automargin=True)
-        st.plotly_chart(fig_all_countries, use_container_width=True,height=140) 
+        st.plotly_chart(fig_all_countries, use_container_width=True,height=130) 
         st.markdown("### Draft Type by Year")
         draft_year = df[df['year'] >= 2019].groupby(['year', 'draft_type'])['FPoints'].sum().reset_index()
         draft_year = draft_year.merge(draft_year.groupby('year').FPoints.sum().reset_index().rename(columns={'FPoints':'total'}))
         draft_year['FPoints'] = draft_year['FPoints'] / draft_year['total']
         fig_draft_bar = px.bar(draft_year, x='year', y='FPoints', color='draft_type', barmode='stack')
-        fig_draft_bar.update_layout(height=250, margin=dict(l=0,r=0,t=0,b=0), legend=dict(orientation="h", y=-0.2))
-        st.plotly_chart(fig_draft_bar, use_container_width=True,height=140)
+        fig_draft_bar.update_layout(height=250, margin=dict(l=0,r=0,t=0,b=0), legend=dict(orientation="h", y=-0.3))
+        st.plotly_chart(fig_draft_bar, use_container_width=True,height=150)
     with col_right:
         view_type = st.radio("Select Record View",options=["Single Game", "Single Season", "Career"],horizontal=True,label_visibility="collapsed")
         fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}','p':'{:.0f}','+/-':'{:.0f}','ts':'{:.0f}','gp':'{:.0f}','year':'{:.0f}',
@@ -165,15 +165,15 @@ with tab_alltime:
         if view_type == "Single Game":
             records = df[~df.matchup.str.contains('all')].sort_values('FPoints', ascending=False)[['name','pos','team', 'year','matchup',
                                                                   'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS','FPoints']]
-            st.dataframe(records.style.format(fmt_dict), height=800, use_container_width=True, hide_index=True,width = "content")
+            st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
         elif view_type == 'Single Season':
             records = pd.concat(
                 (df[df.matchup.str.contains('all')].drop(columns=['matchup','game_id']),
                  df[~df.matchup.str.contains('all')].groupby(['year','team','name','pos']).sum(numeric_only=True).reset_index().drop(columns='game_id')))[['name','pos','team', 'year','gp',
                                                                   'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS','FPoints']].sort_values('FPoints', ascending=False)
-            st.dataframe(records.style.format(fmt_dict), height=800, use_container_width=True, hide_index=True,width = "content")
+            st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
         else:
             records = df.groupby(['team','name','pos']).agg(
                 {'year':'nunique','g':'sum','a':'sum','p':'sum','ts':'sum','+/-':'sum','sog':'sum','ga':'sum','svs':'sum','gwg':'sum','minutes':'sum',
                  'OGS':'sum','GGS':'sum','DGS':'sum','GS':'sum','FPoints':'sum'}).reset_index().sort_values('FPoints', ascending=False)
-            st.dataframe(records.style.format(fmt_dict), height=800, use_container_width=True, hide_index=True,width = "content")
+            st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
