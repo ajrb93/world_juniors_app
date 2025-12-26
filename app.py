@@ -33,6 +33,15 @@ COUNTRY_COLORS = {
     'Switzerland': '#DA291C', 'Germany': '#000000', 'Latvia': '#9E3039', 'Kazakhstan': '#00B1D8'
 }
 
+compact_config = {
+    "FPoints": st.column_config.NumberColumn("FP", width="small"),
+    "g": st.column_config.NumberColumn("G", width="small"),
+    "a": st.column_config.NumberColumn("A", width="small"),
+    "gwg": st.column_config.NumberColumn("GWG", width="small"),
+    "team": st.column_config.TextColumn("Team", width="small"),
+    "name": st.column_config.TextColumn("Player", width="medium"),
+}
+
 @st.cache_data
 def load_and_clean_data():
     df = pd.read_csv("data/dynamic/Final_Master_Dataset.csv")
@@ -48,13 +57,13 @@ cy_val = df['year'].max()
 cy_df = df[df['year'] == cy_val].copy()
 
 # Formatting Helper: 1 decimal for FPoints, 0 for the rest
-fmt_dict = {'FPoints': '{:.1f}', 'goals': '{:.0f}', 'assists': '{:.0f}', 'gwg': '{:.0f}'}
+fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
 
 # --- MAIN DASHBOARD ---
 tab_cy, tab_alltime = st.tabs(["📅 Current Year", "📜 All-Time"])
 
 with tab_cy:
-    col1, col2, col3 = st.columns([1, 1.4, 2.2])
+    col1, col2, col3 = st.columns([1, 2, 2])
 
     # --- COLUMN 1: LEFT ---
     with col1:
@@ -90,7 +99,8 @@ with tab_cy:
             'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
         }).reset_index().sort_values('FPoints', ascending=False)
         
-        st.dataframe(best_tourney.style.format(fmt_dict), height=250, use_container_width=True, hide_index=True)
+        st.dataframe(best_tourney.style.format(fmt_dict), height=250, use_container_width=True, hide_index=True,
+                     column_config=compact_config)
 
     # --- COLUMN 3: RIGHT ---
     with col3:
@@ -105,7 +115,8 @@ with tab_cy:
             
             pts_val = standings.loc[standings['Draftee']==manager, 'FPoints'].values[0]
             with st.expander(f"👤 {manager} | {pts_val:.1f} pts", expanded=True):
-                st.dataframe(player_detail.style.format(fmt_dict), use_container_width=True, hide_index=True)
+                st.dataframe(player_detail.style.format(fmt_dict), use_container_width=True, hide_index=True,
+                             column_config=compact_config)
 
 with tab_alltime:
     st.info("Ready for your All-Time layout specs!")
