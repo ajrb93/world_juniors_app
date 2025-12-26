@@ -8,7 +8,7 @@ from io import StringIO
 
 # PATH CONFIGURATION
 DYNAMIC_DIR = 'data/dynamic/Stats_CY'
-MASTER_FILE = 'data/dynamic/Stats_CY_Master.csv'
+MASTER_FILE = 'data/dynamic/Final_Master_Dataset.csv'
 os.makedirs(DYNAMIC_DIR, exist_ok=True)
 
 def get_website(url):
@@ -95,8 +95,8 @@ def extract_game_lineups(soup):
     return game_lineups
 
 def extract_game_stats(soup,url):
-    game_data = temp_url_statistics.split('/')[-1].split('-')
-    game_data_year = temp_url_statistics.split('/')[5]
+    game_data = url.split('/')[-1].split('-')
+    game_data_year = url.split('/')[5]
     game_data_team = [game_data[1],game_data[3]]
     game_data_id = game_data[0]
     game_statistics = pd.DataFrame()
