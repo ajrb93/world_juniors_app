@@ -9,12 +9,17 @@ st.set_page_config(layout="wide", page_title="WJC Fantasy")
 st.markdown("""
     <style>
     /* Reduce top/side margins */
-    .block-container {padding-top: 0.5rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 2rem;}
+    .block-container {padding-top: 1rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 2rem;}
             
     /* Ensure the Tab labels stay readable */
     button[data-baseweb="tab"] p {
         font-size: 14px !important;
         font-weight: bold !important;
+    }
+            
+    /* Force the dataframe container to be tighter */
+    .stDataFrame {
+        margin-top: -10px !important;
     }
             
     /* Shrink Header sizes */
@@ -113,14 +118,15 @@ with tab_cy:
         st.markdown("### Standings - Detail")
         ordered_managers = standings['Draftee'].tolist()
         
-        for manager in ordered_managers:
+        for i, manager in enumerate(ordered_managers):
             manager_data = cy_df[cy_df['Draftee'] == manager]
             player_detail = manager_data.groupby(['name', 'team', 'draft_type']).agg({
                 'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
             }).reset_index().sort_values('FPoints', ascending=False)
             
             pts_val = standings.loc[standings['Draftee']==manager, 'FPoints'].values[0]
-            with st.expander(f"👤 {manager} | {pts_val:.1f} pts", expanded=True):
+            is_expanded = (i == 0)
+            with st.expander(f"👤 {manager} | {pts_val:.1f} pts", expanded=is_expanded):
                 st.dataframe(player_detail.style.format(fmt_dict), use_container_width=True, hide_index=True,
                              width = "content")
 
