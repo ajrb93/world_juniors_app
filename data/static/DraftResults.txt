@@ -201,3 +201,27 @@ year,fantasyplayer,game_start,name
 2025,Geoff,26,STANCL Jakub,
 2025,Geoff,26,HRADEC Vojtech,
 2025,Geoff,26,FIBIGR Jakub
+2026,Adrian,0,MARTIN Brady
+2026,Adrian,0,HAGE Michael
+2026,Adrian,0,BENAK Adam
+2026,Adrian,0,HUTSON Cole
+2026,Adrian,0,MRTKA Radim
+2026,Adrian,0,PLANTE Max
+2026,AJ,0,MISA Michael
+2026,AJ,0,HAGENS James
+2026,AJ,0,IGINLA Tig
+2026,AJ,0,JIRICEK Adam
+2026,AJ,0,BRUNICKE Harrison
+2026,AJ,0,EKLUND Victor
+2026,Tim,0,MARTONE Porter
+2026,Tim,0,FRONDELL Anton
+2026,Tim,0,STIGA Teddy
+2026,Tim,0,PAREKH Zayne
+2026,Tim,0,HENSLER Logan
+2026,Tim,0,GREENTREE Liam
+2026,Geoff,0,McKENNA Gavin
+2026,Geoff,0,STENBERG Ivar
+2026,Geoff,0,EISERMAN Cole
+2026,Geoff,0,SAHLIN WALLENIUS Leo
+2026,Geoff,0,AITCHESON Kashawn
+2026,Geoff,0,HORCOFF Will
