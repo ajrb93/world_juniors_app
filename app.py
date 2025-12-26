@@ -9,7 +9,7 @@ st.set_page_config(layout="wide", page_title="WJC Fantasy")
 st.markdown("""
     <style>
     /* Reduce top/side margins */
-    .block-container {padding-top: 1.5rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 2rem;}
+    .block-container {padding-top: 2rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 2rem;}
             
     /* Ensure the Tab labels stay readable */
     button[data-baseweb="tab"] p {
@@ -76,12 +76,12 @@ with tab_cy:
         st.markdown("### Standings")
         standings = cy_df.groupby('Draftee')['FPoints'].sum().reset_index().sort_values('FPoints', ascending=False)
         st.dataframe(standings.style.format({'FPoints': '{:.1f}'}).background_gradient(cmap='RdYlGn', subset=['FPoints']), 
-                     hide_index=True, use_container_width=True, height=200)
+                     hide_index=True, use_container_width=True, height=170)
 
         st.markdown("### % Drafted")
         fig_pie = px.pie(cy_df, values='FPoints', names='draft_type', hole=0.4)
         fig_pie.update_layout(margin=dict(l=0,r=0,t=20,b=0), height=180, showlegend=True, legend=dict(orientation="h", yanchor="bottom", y=-0.5, xanchor="center", x=0.5))
-        st.plotly_chart(fig_pie, use_container_width=True,height=100)
+        st.plotly_chart(fig_pie, use_container_width=True,height=120)
 
         st.markdown("### Countries")
         country_pts = cy_df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints',ascending=False)
