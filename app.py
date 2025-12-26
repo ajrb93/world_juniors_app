@@ -11,7 +11,7 @@ def load_data():
     # Replace with your actual GitHub Raw URL
     url = "data/dynamic/Final_Master_Dataset.csv" 
     df = pd.read_csv(url)
-    df['fantasypoints'] = pd.to_numeric(df['fantasypoints'], errors='coerce').fillna(0)
+    df['fantasypoints'] = pd.to_numeric(df['FP'], errors='coerce').fillna(0)
     return df
 
 df = load_data()
