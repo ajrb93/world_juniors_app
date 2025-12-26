@@ -61,7 +61,7 @@ with tab_cy:
         st.markdown("### Standings")
         standings = cy_df.groupby('Draftee')['FPoints'].sum().reset_index().sort_values('FPoints', ascending=False)
         st.dataframe(standings.style.format({'FPoints': '{:.1f}'}).background_gradient(cmap='RdYlGn', subset=['FPoints']), 
-                     hide_index=True, use_container_width=True, height=180)
+                     hide_index=True, use_container_width=True, height=100)
 
         st.markdown("### Countries")
         country_pts = cy_df.groupby('team')['FPoints'].sum().reset_index().sort_values('FPoints',ascending=False)
@@ -82,7 +82,7 @@ with tab_cy:
         timeline['cum_pts'] = timeline.groupby('Draftee')['FPoints'].cumsum()
         
         fig_line = px.line(timeline, x='game_id', y='cum_pts', color='Draftee', markers=True)
-        fig_line.update_layout(height=320, margin=dict(l=0,r=0,t=20,b=0), xaxis_title="Game ID", yaxis_title="Points")
+        fig_line.update_layout(height=150, margin=dict(l=0,r=0,t=20,b=0), xaxis_title="Game ID", yaxis_title="Points")
         st.plotly_chart(fig_line, use_container_width=True)
 
         st.markdown("### Best Tournaments")
@@ -90,7 +90,7 @@ with tab_cy:
             'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
         }).reset_index().sort_values('FPoints', ascending=False)
         
-        st.dataframe(best_tourney.style.format(fmt_dict), height=420, use_container_width=True, hide_index=True)
+        st.dataframe(best_tourney.style.format(fmt_dict), height=250, use_container_width=True, hide_index=True)
 
     # --- COLUMN 3: RIGHT ---
     with col3:
