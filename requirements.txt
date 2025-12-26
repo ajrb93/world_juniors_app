@@ -5,3 +5,4 @@ playwright
 lxml
 nest_asyncio
 streamlit
+plotly
