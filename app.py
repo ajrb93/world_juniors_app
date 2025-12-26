@@ -38,7 +38,7 @@ def load_and_clean_data():
     df = pd.read_csv("data/dynamic/Final_Master_Dataset.csv")
     df['fantasypoints'] = pd.to_numeric(df['FP'], errors='coerce').fillna(0)
     # Fill NA to show "Undrafted" in the pie chart
-    df['draft_type'] = df['draft_type'].fillna('Undrafted').str.replace({'':'Undrafted'})
+    df['draft_type'] = df['draft_type'].fillna('Undrafted').replace({'':'Undrafted'})
     # Use requested shorthand
     df = df.rename(columns={'fantasypoints': 'FPoints', 'fantasyplayer': 'Draftee'})
     return df
