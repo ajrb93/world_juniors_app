@@ -164,15 +164,15 @@ with tab_alltime:
         if view_type == "Single Game":
             records = df[~df.matchup.str.contains('all')].sort_values('FPoints', ascending=False)[['name','pos','team', 'year','matchup','FPoints',
                                                                   'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS']]
-            st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
+            st.dataframe(records.style.format(fmt_dict), height=500, use_container_width=True, hide_index=True,width = "content")
         elif view_type == 'Single Season':
             records = pd.concat(
                 (df[df.matchup.str.contains('all')].drop(columns=['matchup','game_id']),
                  df[~df.matchup.str.contains('all')].groupby(['year','team','name','pos']).sum(numeric_only=True).reset_index().drop(columns='game_id')))[['name','pos','team', 'year','FPoints','gp',
                                                                   'g','a','p','+/-','ts','sog','ga','svs','gwg','minutes','OGS','DGS','GGS','GS']].sort_values('FPoints', ascending=False)
-            st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
+            st.dataframe(records.style.format(fmt_dict), height=500, use_container_width=True, hide_index=True,width = "content")
         else:
             records = df.groupby(['team','name','pos']).agg(
                 {'FPoints':'sum','year':'nunique','g':'sum','a':'sum','p':'sum','ts':'sum','+/-':'sum','sog':'sum','ga':'sum','svs':'sum','gwg':'sum','minutes':'sum',
                  'OGS':'sum','GGS':'sum','DGS':'sum','GS':'sum'}).reset_index().sort_values('FPoints', ascending=False)
-            st.dataframe(records.style.format(fmt_dict), height=600, use_container_width=True, hide_index=True,width = "content")
+            st.dataframe(records.style.format(fmt_dict), height=500, use_container_width=True, hide_index=True,width = "content")
