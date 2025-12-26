@@ -88,7 +88,7 @@ with tab_cy:
         fig_bar = px.bar(country_pts, x='FPoints', y='team', orientation='h', color='team', color_discrete_map=COUNTRY_COLORS)
         fig_bar.update_layout(showlegend=False, margin=dict(l=0,r=0,t=0,b=0), height=230, xaxis_title=None, yaxis_title=None)
         fig_bar.update_yaxes(tickmode='linear', tickfont=dict(size=10),automargin=True)
-        st.plotly_chart(fig_bar, use_container_width=True,height=120)
+        st.plotly_chart(fig_bar, use_container_width=True,height=115)
 
     # --- COLUMN 2: MIDDLE ---
     with col2:
@@ -102,7 +102,7 @@ with tab_cy:
         st.plotly_chart(fig_line, use_container_width=True)
 
         st.markdown("### Best Tournaments")
-        best_tourney = cy_df.fillna('Undrafted').groupby(['name', 'team', 'Draftee']).agg({
+        best_tourney = cy_df.fillna('Undrafted').groupby(['name','pos', 'team', 'Draftee']).agg({
             'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
         }).reset_index().sort_values('FPoints', ascending=False)
         
@@ -116,7 +116,7 @@ with tab_cy:
         
         for i, manager in enumerate(ordered_managers):
             manager_data = cy_df[cy_df['Draftee'] == manager]
-            player_detail = manager_data.groupby(['name', 'team', 'draft_type']).agg({
+            player_detail = manager_data.groupby(['name','pos','team', 'draft_type']).agg({
                 'FPoints': 'sum', 'g': 'sum', 'a': 'sum', 'gwg': 'sum'
             }).reset_index().sort_values('FPoints', ascending=False)
             
