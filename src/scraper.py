@@ -143,7 +143,8 @@ def run_pipeline():
                 lineups = extract_game_lineups(lineups_soup)
                 stats = get_website(temp_url_statistics)
                 stats_soup = BeautifulSoup(stats,'html.parser')
-                if stats_soup.find('title').text == "IIHF Error page":
+                if ((len(stats_soup.find('div',{'class':'m-gc-statistics'}).find_all('div',{'class':'s-filter-item'})) != 4) | 
+                    (stats_soup.find('title').text == "IIHF Error page")):
                     print(url)
                     break
                 else:
