@@ -17,11 +17,27 @@ st.markdown("""
         font-weight: bold !important;
     }
             
-/* Shrinks the expander header text and reduces the vertical padding */
-    .streamlit-expanderHeader {
-        font-size: 12px !important;
-        padding-top: 1px !important;
-        padding-bottom: 1px !important;
+    /* Shrinks the expander header text and reduces the vertical padding */
+            .streamlit-expanderHeader {
+            font-size: 12px !important;
+            padding-top: 1px !important;
+            padding-bottom: 1px !important;
+    }
+            
+    /* 1. Make the Refresh button float in the top right */
+            div[data-testid="stColumn"] button[kind="secondary"] {
+            position: fixed;
+            top: 4.8rem; /* Aligns with the tab labels */
+            right: 2rem;
+            z-index: 999;
+            padding: 0px 10px;
+            height: 30px;
+           width: auto;
+    }
+
+    /* 2. Ensure tabs have zero top margin so they don't push content down */
+    div[data-testid="stTabs"] {
+        margin-top: -10px !important;
     }
             
     /* Shrink Header sizes */
@@ -67,15 +83,12 @@ df = load_and_clean_data()
 # Formatting Helper: 1 decimal for FPoints, 0 for the rest
 fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
 
+if st.button("🔄 Refresh", help="Reload from CSV"):
+    st.cache_data.clear()
+    st.rerun()
+
 # --- MAIN DASHBOARD ---
-top_col1, top_col2 = st.columns([97, 3])
-with top_col1:
-    tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
-with top_col2:
-    st.markdown("<div style='padding-top: 10px;'></div>", unsafe_allow_html=True)
-    if st.button("🔄", help="Refresh Data", use_container_width=True):
-        st.cache_data.clear()
-        st.rerun()
+tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
 
 with tab_cy:
     col1, col2, col3 = st.columns([1, 2,2])
