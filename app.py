@@ -24,22 +24,6 @@ st.markdown("""
             padding-bottom: 1px !important;
     }
             
-    /* target the container of the button with the key 'refresh_btn' */
-    div[data-testid="stVerticalBlock"] > div:has(button[key="refresh_btn"]) {
-        position: absolute;
-        right: 1rem;
-        top: 0.1rem; /* Adjust this to align vertically with tabs */
-        z-index: 1000;
-        width: auto;
-    }
-
-    /* Styling the button itself to be small and clean */
-    button[key="refresh_btn"] {
-        height: 32px !important;
-        padding: 0px 12px !important;
-        border-radius: 5px !important;
-    }
-            
     /* Shrink Header sizes */
     h1 { font-size: 14px !important; margin-bottom: 0.2rem !important; }
     h3 { font-size: 14px !important; margin-top: 0.2rem !important; margin-bottom: 0.2rem !important; }
@@ -62,8 +46,6 @@ COUNTRY_COLORS = {
     'Switzerland': '#DA291C', 'Germany': '#000000', 'Latvia': '#9E3039', 'Kazakhstan': '#00B1D8'
 }
 
-@st.cache_data
-
 
 def load_and_clean_data(ttl=3600):
     df = pd.read_csv("data/dynamic/Final_Master_Dataset.csv")
@@ -78,10 +60,6 @@ df = load_and_clean_data()
 
 # Formatting Helper: 1 decimal for FPoints, 0 for the rest
 fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
-
-if st.button("🔄 Refresh", help="Reload from CSV",key="refresh_btn"):
-    st.cache_data.clear()
-    st.rerun()
 
 # --- MAIN DASHBOARD ---
 tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
