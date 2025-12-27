@@ -47,7 +47,9 @@ COUNTRY_COLORS = {
 }
 
 @st.cache_data
-def load_and_clean_data():
+
+
+def load_and_clean_data(ttl=3600):
     df = pd.read_csv("data/dynamic/Final_Master_Dataset.csv")
     df['fantasypoints'] = pd.to_numeric(df['FP'], errors='coerce').fillna(0)
     # Fill NA to show "Undrafted" in the pie chart
@@ -56,6 +58,10 @@ def load_and_clean_data():
     df = df.rename(columns={'fantasypoints': 'FPoints', 'fantasyplayer': 'Draftee'})
     return df
 
+if st.button("🔄 Refresh Data"):
+    st.cache_data.clear()
+    st.rerun()
+    
 df = load_and_clean_data()
 
 # Formatting Helper: 1 decimal for FPoints, 0 for the rest
