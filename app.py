@@ -24,20 +24,20 @@ st.markdown("""
             padding-bottom: 1px !important;
     }
             
-    /* 1. Make the Refresh button float in the top right */
-            div[data-testid="stColumn"] button[kind="secondary"] {
-            position: fixed;
-            top: 4.8rem; /* Aligns with the tab labels */
-            right: 2rem;
-            z-index: 999;
-            padding: 0px 10px;
-            height: 30px;
-           width: auto;
+    /* target the container of the button with the key 'refresh_btn' */
+    div[data-testid="stVerticalBlock"] > div:has(button[key="refresh_btn"]) {
+        position: absolute;
+        right: 1rem;
+        top: 0.1rem; /* Adjust this to align vertically with tabs */
+        z-index: 1000;
+        width: auto;
     }
 
-    /* 2. Ensure tabs have zero top margin so they don't push content down */
-    div[data-testid="stTabs"] {
-        margin-top: -10px !important;
+    /* Styling the button itself to be small and clean */
+    button[key="refresh_btn"] {
+        height: 32px !important;
+        padding: 0px 12px !important;
+        border-radius: 5px !important;
     }
             
     /* Shrink Header sizes */
@@ -73,17 +73,13 @@ def load_and_clean_data(ttl=3600):
     # Use requested shorthand
     df = df.rename(columns={'fantasypoints': 'FPoints', 'fantasyplayer': 'Draftee'})
     return df
-
-if st.button("🔄 Refresh Data"):
-    st.cache_data.clear()
-    st.rerun()
     
 df = load_and_clean_data()
 
 # Formatting Helper: 1 decimal for FPoints, 0 for the rest
 fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
 
-if st.button("🔄 Refresh", help="Reload from CSV"):
+if st.button("🔄 Refresh", help="Reload from CSV",key="refresh_btn"):
     st.cache_data.clear()
     st.rerun()
 
