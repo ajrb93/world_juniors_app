@@ -68,7 +68,7 @@ df = load_and_clean_data()
 fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
 
 # --- MAIN DASHBOARD ---
-top_col1, top_col2 = st.columns([9, 1])
+top_col1, top_col2 = st.columns([97, 3])
 with top_col1:
     tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
 with top_col2:
