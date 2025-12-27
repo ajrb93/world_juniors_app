@@ -68,7 +68,14 @@ df = load_and_clean_data()
 fmt_dict = {'FPoints': '{:.1f}', 'g': '{:.0f}', 'a': '{:.0f}', 'gwg': '{:.0f}'}
 
 # --- MAIN DASHBOARD ---
-tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
+top_col1, top_col2 = st.columns([9, 1])
+with top_col1:
+    tab_cy, tab_alltime = st.tabs([f"🏆 Single-Year Records", "📜 All-Time Records"])
+with top_col2:
+    st.markdown("<div style='padding-top: 10px;'></div>", unsafe_allow_html=True)
+    if st.button("🔄", help="Refresh Data", use_container_width=True):
+        st.cache_data.clear()
+        st.rerun()
 
 with tab_cy:
     col1, col2, col3 = st.columns([1, 2,2])
