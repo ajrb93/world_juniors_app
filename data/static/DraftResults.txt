@@ -215,7 +215,7 @@ year,fantasyplayer,game_start,name
 2026,AJ,0,JIRICEK Adam
 2026,AJ,0,BRUNICKE Harrison
 2026,AJ,0,EKLUND Victor
-2026,AJ,26,BJORK Viggo
+2026,AJ,26,BJORCK Viggo
 2026,Tim,0,MARTONE Porter
 2026,Tim,0,FRONDELL Anton
 2026,Tim,0,STIGA Teddy
